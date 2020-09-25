@@ -25,6 +25,6 @@ elif client_message == "EXIT":
     client_socket.close()
 else:
     client_socket.send(("your command not exist yet, plese use one of those - NAME, TIME, RAND, EXIT").encode())
-
+client_socket.send('end of message'.encode())
 client_socket.close()
 server_socket.close()
