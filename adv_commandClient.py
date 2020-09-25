@@ -19,8 +19,11 @@ def valid_request(request):
 
 
 def send_request_to_server(my_socket, request):
-    send_request = str(len(request)) + request
-    my_socket.send(send_request.encode())
+    request_len = str(len(request))
+    if len(request_len) <= 9:
+        request_len = '0'+request_len
+    request_to_send = request_len + request
+    my_socket.send(request_to_send.encode())
 
 
 def handle_server_response(my_socket, request):
