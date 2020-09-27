@@ -27,5 +27,37 @@ def send_request_to_server(my_socket, request):
 
 
 def handle_server_response(my_socket, request):
-    if request == "":
-        recv_data_len = my_socket.recv(1024)
+    if request != 'SEND_FILE':
+        print(my_socket.recv(1024).decode())
+    else:
+        get_data = True
+        image = None
+        while get_data:
+            i = my_socket.recv(1024)
+            if i.encode() == "done":
+                get_data = False
+                print('saving file end')
+                pass
+            image += i
+            image.save('C:\\Users\\Avi Fenesh\\OneDrive\שולחן העבודה\\networks\\netProjs\\image\\file_got.png')
+def main():
+    # open socket with the server
+    my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    my_socket.connect((IP, PORT))
+    # print instructions
+    print('Welcome to remote computer application. Available commands are:\n')
+    print('TAKE_SCREENSHOT\nSEND_FILE\nDIR\nDELETE\nCOPY\nEXECUTE\nEXIT')
+    done = False
+    # loop until user requested to exit
+    while not done:
+        request = input("Please enter command:\n")
+        if valid_request(request):
+            send_request_to_server(my_socket, request.encode())
+            handle_server_response(my_socket, request)
+            if request == 'EXIT':
+                done = True
+    my_socket.close()
+
+
+if __name__ == '__main__':
+    main()
