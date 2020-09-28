@@ -8,6 +8,10 @@ import shutil
 import socket
 import subprocess
 
+import PIL
+from PIL import ImageGrab
+from PIL import Image
+
 IP = '127.0.0.1'
 PORT = 8820
 requests = ['TAKE_SCREENSHOT', "SEND_FILE", "DIR", "DELETE", "COPY", "EXECUTE", "EXIT"]
@@ -15,10 +19,8 @@ requests = ['TAKE_SCREENSHOT', "SEND_FILE", "DIR", "DELETE", "COPY", "EXECUTE", 
 
 def receive_client_request(client_socket):
     client_message = client_socket.recv(1024).decode()
-    split_message = client_message.split()
+    split_message = [] + client_message.split()
     command = split_message[0]
-    command_len = command[0:2]
-    command = command[2:-1]
     if len(split_message) == 2:
         param = split_message[1]
         return command, param
@@ -68,7 +70,7 @@ def send_file(client, params):
 def handle_client_request(command, params=None):
         if command == 'TAKE_SCREENSHOT':
             take_screenshot()
-            send_response_to_client('m - screen shoot toked')
+            return 'm - screen shoot toked'
         elif command == 'SEND_FILE':
             return params
         elif command == 'DIR':
