@@ -12,7 +12,7 @@ requests = ["TAKE_SCREENSHOT", "SEND_FILE", "DIR", "DELETE", "COPY", "EXECUTE", 
 
 
 def valid_request(request):
-    req_to_check = [] + request.split()
+    req_to_check = request.split('#')
     if req_to_check[0] in requests:
         valid = True
     else:
@@ -55,10 +55,11 @@ def main():
     # print instructions
     print('Welcome to remote computer application. Available commands are:\n')
     print('TAKE_SCREENSHOT\nSEND_FILE\nDIR\nDELETE\nCOPY\nEXECUTE\nEXIT')
+    print('before adding a path please type # before, instead of space')
     done = False
     # loop until user requested to exit
     while not done:
-        request = str(input("Please enter command:\n"))
+        request = (r"") + str(input('Please enter command:\n'))
         if valid_request(request):
             send_request_to_server(my_socket, request)
             handle_server_response(my_socket, request)

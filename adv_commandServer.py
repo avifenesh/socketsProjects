@@ -19,7 +19,7 @@ requests = ['TAKE_SCREENSHOT', "SEND_FILE", "DIR", "DELETE", "COPY", "EXECUTE", 
 
 def receive_client_request(client_socket):
     client_message = client_socket.recv(1024).decode()
-    split_message = [] + client_message.split()
+    split_message = client_message.split('#')
     command = split_message[0]
     if len(split_message) == 2:
         param = split_message[1]
