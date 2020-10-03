@@ -7,10 +7,8 @@ import os
 import shutil
 import socket
 import subprocess
-
 import PIL
 from PIL import ImageGrab
-from PIL import Image
 
 IP = '127.0.0.1'
 PORT = 8820
@@ -58,13 +56,16 @@ def take_screenshot():
 
 
 def send_file(client, params):
-    o = open(params, "rb")
-    data = o.read()
-    chunks, chunk_size = len(data), 1024
-    for i in range(0, chunks, chunk_size):
-        client.send(data[i:i + chunk_size])
+    o = open(params, 'rb')
+    data = o.read(1024)
+    while (data):
+        client.send(data)
+        print("sent ", repr(data))
+        data = o.read(1024)
     o.close()
-    client.send('done'.encode())
+    print('Done sending')
+    client.send('Thank you for connecting')
+    client.close()
 
 
 def handle_client_request(command, params=None):
@@ -92,7 +93,7 @@ def handle_client_request(command, params=None):
 
 
 def send_response_to_client(response, client_socket):
-    if response[0] == 'm':
+    if response.encode()[0] == 'm':
         client_socket.send(response.encode())
         client_socket.send('done'.encode())
     else:
